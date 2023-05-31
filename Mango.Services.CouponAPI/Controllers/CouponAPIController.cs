@@ -9,17 +9,17 @@ using static Azure.Core.HttpHeader;
 
 namespace Mango.Services.CouponAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/coupon")]
     [ApiController]
     public class CouponAPIController : ControllerBase
     {
         private readonly AppDbContext _db;
         private ResponseDto _response;
         private IMapper _mapper;
-        public CouponAPIController(AppDbContext db,IMapper mapper)
+        public CouponAPIController(AppDbContext db, IMapper mapper)
         {
-                _db = db;
-            _response =new ResponseDto();
+            _db = db;
+            _response = new ResponseDto();
             _mapper = mapper;
         }
 
@@ -29,12 +29,12 @@ namespace Mango.Services.CouponAPI.Controllers
             try
             {
                 IEnumerable<Coupon> list = _db.Coupons.ToList();
-                
+
                 _response.Result = _mapper.Map<IEnumerable<CouponDto>>(list);
             }
             catch (Exception ex)
             {
-                _response.IsSuccess=false;
+                _response.IsSuccess = false;
                 _response.Message = ex.Message;
             }
 
@@ -47,7 +47,7 @@ namespace Mango.Services.CouponAPI.Controllers
             try
             {
                 Coupon coupon = _db.Coupons.First(u => u.CouponId == id);
-                
+
                 _response.Result = _mapper.Map<CouponDto>(coupon); ;
             }
             catch (Exception ex) { }
@@ -68,7 +68,7 @@ namespace Mango.Services.CouponAPI.Controllers
         }
 
         [HttpPost]
-        public ResponseDto Post([FromBody]CouponDto coupondto) 
+        public ResponseDto Post([FromBody] CouponDto coupondto)
         {
             try
             {
@@ -78,9 +78,9 @@ namespace Mango.Services.CouponAPI.Controllers
 
                 _response.Result = _mapper.Map<CouponDto>(coupon);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
-                _response.IsSuccess= false;
+                _response.IsSuccess = false;
                 _response.Message = ex.Message;
             }
             return _response;
@@ -104,6 +104,7 @@ namespace Mango.Services.CouponAPI.Controllers
             return _response;
         }
         [HttpDelete]
+        [Route("{id:int}")]
         public ResponseDto Delete(int id)
         {
             try
